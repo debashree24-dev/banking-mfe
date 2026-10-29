@@ -14,6 +14,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+## Deploying to GitHub Pages
+
+The GitHub Actions workflow in `.github/workflows/deploy.yml` builds the `bank-shell`, `loan-mfe`, and `insurance-mfe` projects and deploys them to GitHub Pages. In the repository settings, open **Pages** and set **Build and deployment → Source** to **GitHub Actions**. The workflow deploys on pushes to `main` or `master`, or can be run manually from the **Actions** tab.
+
+The host app is published at the repository site URL, with the remote apps under `/loan-mfe/` and `/insurance-mfe/`. The remote URLs are configured in `projects/bank-shell/public/federation.manifest.json`.
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).

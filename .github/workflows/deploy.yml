@@ -1,0 +1,62 @@
+name: Deploy Angular apps to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular applications
+        run: |
+          npx ng build loan-mfe --configuration production --base-href "/banking-mfe/loan-mfe/"
+          npx ng build insurance-mfe --configuration production --base-href "/banking-mfe/insurance-mfe/"
+          npx ng build bank-shell --configuration production --base-href "/banking-mfe/"
+
+      - name: Assemble GitHub Pages site
+        run: |
+          mkdir -p pages/loan-mfe pages/insurance-mfe
+          cp -R dist/bank-shell/browser/. pages/
+          cp -R dist/loan-mfe/browser/. pages/loan-mfe/
+          cp -R dist/insurance-mfe/browser/. pages/insurance-mfe/
+          cp pages/index.html pages/404.html
+          touch pages/.nojekyll
+          test -f pages/loan-mfe/remoteEntry.json
+          test -f pages/insurance-mfe/remoteEntry.json
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
