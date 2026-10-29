@@ -1,4 +1,4 @@
 {
-	"loan-mfe": "http://localhost:4201/remoteEntry.json",
-	"insurance-mfe": "http://localhost:4202/remoteEntry.json"
+  "loan-mfe": "https://debashree24-dev.github.io/banking-mfe/loan-mfe/remoteEntry.json",
+  "insurance-mfe": "https://debashree24-dev.github.io/banking-mfe/insurance-mfe/remoteEntry.json"
 }
