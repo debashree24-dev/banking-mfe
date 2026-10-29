@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand bank-navbar navbar-dark">
+  <div class="container py-2">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" routerLink="/loan">
+      <span class="bank-brand-mark">N</span>
+      Northstar Banking
+    </a>
+    <div class="navbar-nav flex-row gap-2 ms-auto">
+      <a class="nav-link px-3" routerLink="/loan" routerLinkActive="active">Loans</a>
+      <a class="nav-link px-3" routerLink="/insurance" routerLinkActive="active">Insurance</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4 py-lg-5">
+  <router-outlet></router-outlet>
+</main>

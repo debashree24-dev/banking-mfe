@@ -1,0 +1,25 @@
+.bank-navbar {
+  background: #102b46;
+}
+
+.bank-brand-mark {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  background: #36b37e;
+  color: #102b46;
+  font-weight: 800;
+}
+
+.bank-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.72);
+  border-radius: 0.5rem;
+}
+
+.bank-navbar .nav-link:hover,
+.bank-navbar .nav-link.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}

@@ -1,0 +1,56 @@
+<section class="rounded-4 p-4 p-lg-5 mb-4 text-white" style="background: linear-gradient(120deg, #173b58, #276b62)">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-8">
+      <p class="text-uppercase small fw-semibold mb-2 opacity-75">Protection workspace</p>
+      <h1 class="display-6 fw-bold mb-3">Coverage for the things that matter.</h1>
+      <p class="lead mb-0 opacity-75">Manage your policies and keep track of claims in one place.</p>
+    </div>
+    <div class="col-lg-4 text-lg-end"><a class="btn btn-light btn-lg" routerLink="/insurance/claim-list">Manage claims <span aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-4"><div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+    <p class="page-eyebrow mb-2">Active policies</p><p class="display-6 fw-semibold mb-0">{{ policies.length }}</p><span class="text-secondary small">Your coverage is in one place</span>
+  </div></div></div>
+  <div class="col-sm-6 col-xl-4"><div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+    <p class="page-eyebrow mb-2">Claims in progress</p><p class="display-6 fw-semibold mb-0">{{ openClaims }}</p><span class="text-secondary small">Track updates and next steps</span>
+  </div></div></div>
+  <div class="col-xl-4"><div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+    <p class="page-eyebrow mb-2">Claims filed</p><p class="display-6 fw-semibold mb-0">{{ store.claims().length }}</p><span class="text-secondary small">Including your approved claims</span>
+  </div></div></div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div><p class="page-eyebrow mb-1">Your coverage</p><h2 class="h4 mb-0">Active policies</h2></div>
+        <span class="badge text-bg-success rounded-pill">Protected</span>
+      </div>
+      @for (policy of policies; track policy.number) {
+        <div class="d-flex align-items-center gap-3 border-top py-3">
+          <div class="rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width: 2.75rem; height: 2.75rem">{{ policy.icon }}</div>
+          <div class="flex-grow-1"><div class="fw-semibold">{{ policy.type }}</div><div class="small text-secondary">{{ policy.number }} · Renews {{ policy.renewal }}</div></div>
+          <div class="text-end"><div class="small text-secondary">Coverage</div><div class="fw-semibold">{{ policy.coverage }}</div></div>
+        </div>
+      }
+    </div></div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div><p class="page-eyebrow mb-1">Latest updates</p><h2 class="h4 mb-0">Recent claims</h2></div>
+        <a class="btn btn-sm btn-outline-primary" routerLink="/insurance/claim-list">View all</a>
+      </div>
+      @for (claim of store.claims().slice(0, 3); track claim.id) {
+        <div class="border-top py-3 d-flex justify-content-between gap-3">
+          <div><div class="fw-semibold">{{ claim.type }} claim</div><div class="small text-secondary">#{{ claim.id }} · {{ claim.submittedAt }}</div></div>
+          <div class="text-end"><div class="fw-semibold">{{ claim.amount | currency:'USD':'symbol':'1.0-0' }}</div><span class="badge rounded-pill" [class.text-bg-success]="claim.status === 'Approved'" [class.text-bg-warning]="claim.status === 'In review'" [class.text-bg-secondary]="claim.status === 'Submitted'">{{ claim.status }}</span></div>
+        </div>
+      } @empty {
+        <p class="text-secondary border-top pt-3 mb-0">No claims filed yet.</p>
+      }
+    </div></div>
+  </div>
+</div>

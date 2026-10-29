@@ -1,0 +1,96 @@
+<section class="rounded-4 p-4 p-lg-5 mb-4 text-white" style="background: linear-gradient(120deg, #123b5d, #176b70)">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-8">
+      <p class="text-uppercase small fw-semibold mb-2 opacity-75">Lending workspace</p>
+      <h1 class="display-6 fw-bold mb-3">Make your next move possible.</h1>
+      <p class="lead mb-0 opacity-75">Explore your loan applications and get a clear view of what comes next.</p>
+    </div>
+    <div class="col-lg-4 text-lg-end">
+      <a class="btn btn-light btn-lg" routerLink="/loan/loanList">View applications <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+      <p class="page-eyebrow mb-2">Applications</p>
+      <p class="display-6 fw-semibold mb-0">{{ store.applications().length }}</p>
+      <span class="text-secondary small">Across all loan products</span>
+    </div></div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+      <p class="page-eyebrow mb-2">Under review</p>
+      <p class="display-6 fw-semibold mb-0">{{ applicationsUnderReview }}</p>
+      <span class="text-secondary small">We’ll keep you updated</span>
+    </div></div>
+  </div>
+  <div class="col-xl-4">
+    <div class="card border-0 shadow-sm h-100"><div class="card-body p-4">
+      <p class="page-eyebrow mb-2">Approved amount</p>
+      <p class="display-6 fw-semibold mb-0">{{ approvedAmount | currency:'USD':'symbol':'1.0-0' }}</p>
+      <span class="text-secondary small">Total across approved applications</span>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div><p class="page-eyebrow mb-1">Your loans</p><h2 class="h4 mb-0">Recent applications</h2></div>
+          <a class="btn btn-sm btn-outline-primary" routerLink="/loan/loanList">View all</a>
+        </div>
+        @for (application of store.applications().slice(0, 3); track application.id) {
+          <div class="d-flex justify-content-between align-items-center border-top py-3 gap-3">
+            <div><div class="fw-semibold">{{ application.purpose }}</div><div class="small text-secondary">{{ application.applicant }} · #{{ application.id }}</div></div>
+            <div class="text-end"><div class="fw-semibold">{{ application.amount | currency:'USD':'symbol':'1.0-0' }}</div><span class="badge rounded-pill" [class.text-bg-success]="application.status === 'Approved'" [class.text-bg-warning]="application.status === 'Under review'" [class.text-bg-secondary]="application.status === 'Needs documents'">{{ application.status }}</span></div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <p class="page-eyebrow mb-1">Get started</p>
+        <h2 class="h4 mb-1">Request a loan</h2>
+        <p class="text-secondary small mb-4">Submit a sample application for review.</p>
+        @if (submitted) {
+          <div class="alert alert-success py-2" role="status">Your application was submitted.</div>
+        }
+        @if (validationError) {
+          <div class="alert alert-danger py-2" role="alert">Enter a name, an amount of at least $500, and a loan term.</div>
+        }
+        <form #applicationForm="ngForm" (ngSubmit)="apply(applicationForm)">
+          <div class="mb-3">
+            <label class="form-label" for="applicant">Full name</label>
+            <input id="applicant" class="form-control" name="applicant" [(ngModel)]="applicant" required minlength="2" placeholder="Your name">
+          </div>
+          <div class="row g-3">
+            <div class="col-7">
+              <label class="form-label" for="amount">Amount</label>
+              <div class="input-group"><span class="input-group-text">$</span><input id="amount" class="form-control" type="number" name="amount" [(ngModel)]="amount" min="500" max="1000000" required></div>
+            </div>
+            <div class="col-5">
+              <label class="form-label" for="termMonths">Term</label>
+              <select id="termMonths" class="form-select" name="termMonths" [(ngModel)]="termMonths" required>
+                <option [ngValue]="12">12 mo</option><option [ngValue]="24">24 mo</option><option [ngValue]="36">36 mo</option><option [ngValue]="48">48 mo</option><option [ngValue]="60">60 mo</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3 mb-4">
+            <label class="form-label" for="purpose">Loan purpose</label>
+            <select id="purpose" class="form-select" name="purpose" [(ngModel)]="purpose">
+              <option>Personal loan</option><option>Vehicle</option><option>Home improvement</option><option>Debt consolidation</option>
+            </select>
+          </div>
+          <button class="btn btn-primary w-100" type="submit">Submit application</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
